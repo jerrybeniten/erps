@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><?php echo isset($title) ? $title : '' ; ?></title>
+	<link href="/css/styles.css" rel="stylesheet" type="text/css" />
+	<script src="/js/jquery-1.11.0.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/bootstrap-datepicker.js"></script>
+	<script src="/js/erps.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse" role="navigation">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="logo" href="/"><span class="glyphicon glyphicon-signal" style="margin-left:10px;margin-top:18px;color:white;font-size:12px;" ></span><span style="margin-left:5px;color:white;">ERPS</span></a>
+	    </div>
+	  </div><!-- /.container-fluid -->
+	</nav>
+	<div class="container">
+        <div class="row">
+			<?php /*<!--h1>{{ $heading }}</h1--> */ ?>
+			<?php if ( Auth::check() ) { ?>
+			<div class="row">
+				<div class="col-md-2">
+					<ul class="nav nav-pills nav-stacked">
+						<li class="<?php echo ( Request::segment(1) === 'dashboard' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/'); ?>">Dashboard</a></li>
+						<li class="<?php echo ( Request::segment(1) === 'hr' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/hr'); ?>">Human Resources</a></li>
+						<li><a href="#">Production</a></li>
+						<li><a href="#">Marketing and Sales</a></li>
+						<li><a href="#">IT</a></li>					
+						<li><a href="#">Payroll</a></li>					
+						<li><a href="#">Companies</a></li>
+						<li><a href="#">Supplier</a></li>
+						<li><a href="#">Messenger</a></li>
+						<li><a href="#">Settings</a></li>
+						<li><a href="<?php echo URL::to('/logout'); ?>">Logout</a></li>
+					</ul>
+				</div>
+				<div class="col-3">
+					<?php echo isset($partial) ? $partial."<br /><br />" : '' ; ?>
+					<?php echo isset($content) ? $content."<br /><br />" : '' ; ?>
+				</div>
+			</div>
+			<?php } else { ?>
+				<?php echo isset($content) ? $content."<br /><br />" : '' ; ?>
+			<?php } ?>
+			<div id="footer" class="well">
+				<div>ERPS - Enterprise Resources Planning System | ERPS Copyright 2014</div>
+				<div style="font-size:10px;">ERPS is a sole proprietary product of Jerry Beniten - Proud to be Pinoy!</div>
+			</div>
+        </div>
+	</div>
+</body>
+</html>
