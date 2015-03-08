@@ -19,7 +19,10 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="logo" href="/"><span class="glyphicon glyphicon-signal" style="margin-left:10px;margin-top:18px;color:white;font-size:12px;" ></span><span style="margin-left:5px;color:white;">ERPS</span></a>
+	      <a class="logo" href="/">
+			<span class="glyphicon glyphicon-signal" style="margin-left:10px;margin-top:18px;color:white;font-size:12px;" ></span>
+			<span style="margin-left:5px;color:white;">Enterprise Resource Planning System (ERPs)</span>
+		  </a>
 	    </div>
 	  </div><!-- /.container-fluid -->
 	</nav>
@@ -52,8 +55,8 @@
 				<?php echo isset($content) ? $content."<br /><br />" : '' ; ?>
 			<?php } ?>
 			<div id="footer" class="well">
-				<div>ERPS - Enterprise Resources Planning System | ERPS Copyright 2014</div>
-				<div style="font-size:10px;">ERPS is a sole proprietary product of Jerry Beniten - Proud to be Pinoy!</div>
+				<div>ERPs - Enterprise Resources Planning System | ERPS Copyright <?php echo date('Y'); ?></div>
+				<div style="font-size:10px;">ERPs is a free product created by <a href="http://jerrybeniten.com" target="_new">Jerry Beniten</a> - Proud to be Pinoy!</div>
 			</div>
         </div>
 	</div>

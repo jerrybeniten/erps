@@ -14,7 +14,7 @@
 Route::any('/', 'HomeController@login');
 
 // Form protection against CSRF (Cross-site Request Forgery)
-// Route::when('*', 'csrf', array('post', 'put', 'delete'));
+Route::when('*', 'csrf', array('post', 'put', 'delete'));
 
 // Authentication
 Route::any('authenticate', 'AuthenticateController@authenticate');
@@ -23,7 +23,7 @@ Route::any('authenticate', 'AuthenticateController@authenticate');
 Route::group(array('before' => 'auth'), function()
 {
 	// Authentication
-	Route::any('logout', 'HomeController@logout');
+	Route::post('logout', 'HomeController@logout');
 	
 	// Dashboard
 	Route::any('dashboard', 'DashboardController@dashboard');

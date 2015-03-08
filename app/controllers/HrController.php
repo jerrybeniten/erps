@@ -42,27 +42,31 @@ class HrController extends BaseController {
 	
 	// CRUDS for job analysis
 	public function cruds_job_analysis()
-	{
-	
-		$input = $this->input;
-
+	{		
 		$rules = array(
 			'title'   => 'required',
 			'description' => 'required'
 		);	
 		
-		$validatior = Validator::make($input, $rules);
+		$validatior = Validator::make($this->input, $rules);
 		
 		switch($this->input['action'])
 		{
-			// Create
+			// Create this includes update
 			case 'create': 
-				if( $validatior->passes() ) 
+				if( $validatior->passes() && empty( $this->input['hash'] ) ) 
 				{
 					Jobanalysis::insert( $this->input );
 					return Response::json( true );
+					
+				} else if ( $validatior->passes() && !empty( $this->input['hash'] ) ) {
+				
+					Jobanalysis::update( $this->input );
+					return Response::json( true );
+		
 				} else {
-					return Response::json($validatior->messages());
+				
+					return Response::json( $validatior->messages() );
 				}
 			break; 
 			
@@ -71,7 +75,12 @@ class HrController extends BaseController {
 				$result = Jobanalysis::read();
 				return Response::json( $result );
 			break;
-			// Update
+			
+			// Gedit = get a single row of data
+			case 'gedit':
+				$result = Jobanalysis::getData( $this->input );
+				return Response::json( $result );
+			break;
 		
 			// Delete
 			

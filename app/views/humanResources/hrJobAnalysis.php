@@ -1,5 +1,6 @@
 <div class="container">
-	<?php echo Form::token(); ?>
+
+	<?php $token = csrf_token(); ?>
 	
 	<!-- Modal Trigger : Create New Job Analysis-->
 	<div class="modal-zero">
@@ -20,6 +21,7 @@
 		  </div>
 		  <?php echo Form::open(array('id' => 'createJobAnalysyForm', 'role' => 'form')); ?>
 			  <?php echo Form::hidden('action', 'create'); ?>
+			  <?php echo Form::hidden('hash', '', array('id' => 'hash')); ?>
 			  <div class="modal-body">
 					<div class="form-group">
 					  <?php echo Form::label('title', 'Job Title'); ?>
@@ -64,11 +66,10 @@
 <script>
 		
 	(function($){
-		standardAjaxSubmit({'action' : 'read'}, 'post', '/hr/cruds_job_analysis', responseCrudsJobAnalysisRead);
+		standardAjaxSubmit({'action' : 'read', '_token' : "<?php echo $token; ?>"}, 'post', '/hr/cruds_job_analysis', responseCrudsJobAnalysisRead);
 	})(jQuery);
 		
 	// Callbacks
-	
 	function responseCrudsJobAnalysisRead(response)
 	{
 		// check the array length if greater 0
@@ -80,22 +81,28 @@
 			$('.ja-table').html('');
 			$('.ja-table').html(""+
 				"<div class='container' style='width:70%'>"+
+				"<div style='cursor:pointer' data-toggle='modal' data-target='#myModal' class='ja-add'><span><i class='glyphicon glyphicon-plus' style='color:green'></i></span><span> Add Job Analysis</span></div><br/>"+
 					"<table class='table table-bordered table-striped'>"+
 						"<thead>"+
 						  "<tr>"+
 							"<th class='col-sm-1'>Title</th>"+
-							"<th class='col-sm-1'>Description</th>"+					
+							"<th class='col-sm-1'>Description</th>"+
+							"<th class='col-sm-1'>Status</th>"+						
+							"<th class='col-sm-1'>Action</th>"+	
 						  "</tr>"+
 						"</thead>"+
 						"<tbody>"+
 						"</tbody>"+
 					"</table>"+
-				"</div>");
-			
-			
+				"</div>");		
 			$.each(response, function(key, value)
 			{
-				$('table').append('<tr><td>'+value.title+'</td><td>'+value.description+'</td></tr>');
+				$('table').append('<tr><td>'+value.ja_title+'</td><td>'+value.description+'</td><td>'+uCfirst(value.s_title)+'</td>'+
+				'<td>'+
+				'<div data-toggle="modal" data-target="#myModal" id="'+value.hash+'" class="ja-edit glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </div> &nbsp;'+
+				'<div class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </div>'+
+				'</td>'+
+				'</tr>');
 			});
 		}
 	}
@@ -106,6 +113,36 @@
 		if( response===true ) 
 		{
 			$('#myModal').modal('hide');
+		    
+			var ja_title 	= $('#title').val();
+			var description = $('#description').val();
+			var s_title  	= $('#status').val();
+			
+			switch(s_title) 
+			{
+				case '1' : s_title = 'New';
+				break;
+				
+				case '2' : s_title = 'Discussion';
+				break;
+				
+				case '3' : s_title = 'Description Creation';
+				break;
+				
+				case '4' : s_title = 'Person Specification';
+				break;
+				
+				case '5' : s_title = 'Job Advertistment';
+				break;
+			}
+			$('table').prepend('<tr><td>'+ja_title+'</td><td>'+description+'</td><td>'+s_title+'</td>'+
+			'<td>'+
+				'<span class="glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </span> &nbsp;'+
+				'<span class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
+				'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
+			'</td>'+
+			'</tr>');
+			$('form#createJobAnalysyForm')[0].reset();
 		} else {
 			$.each(response,function(key, val){
 				$('#'+key).css({'border-color' : 'red'});
@@ -116,7 +153,23 @@
 		return false;
 	}
 	
-   // Actions
+	function responseCrudsJobAnalysisGedit(response)
+	{
+		var title 		= response[0].title;
+		var description = response[0].description;
+		var status 		= response[0].status;
+		var hash 		= response[0].hash;
+		
+		$('#title').val(title);
+		$('#description').val(description);
+		$('#status').val(status);
+		$('#hash').val(hash);
+
+		return false;
+	}
+	
+	// Actions
+	// ADD
 	$('form#createJobAnalysyForm').on('submit', function(e)
 	{
 		$('.error').html("");
@@ -125,6 +178,21 @@
 		standardAjaxSubmit(post_data, 'post', '/hr/cruds_job_analysis', responseCrudsJobAnalysis);
 		e.preventDefault();
 		return false;
+	});
+	
+	//Trigger for the modal
+	$("div").on('click', '.ja-add', function()
+	{
+		$("#myModalLabel").html("Create New Job Analysis");
+	});
+	
+	// EDIT
+	// Trigger for the modal and load the single data
+	$('div').on('click', '.ja-edit', function(e)
+	{
+		var ja_id = this.id;
+		standardAjaxSubmit({'action' : 'gedit', '_token' : "<?php echo $token; ?>", 'ja_id' : ja_id}, 'post', '/hr/cruds_job_analysis', responseCrudsJobAnalysisGedit);
+		$("#myModalLabel").html("Update Job Analysis");
 	});
 			
 </script>
