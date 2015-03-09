@@ -23,7 +23,7 @@ Route::any('authenticate', 'AuthenticateController@authenticate');
 Route::group(array('before' => 'auth'), function()
 {
 	// Authentication
-	Route::post('logout', 'HomeController@logout');
+	Route::any('logout', 'HomeController@logout');
 	
 	// Dashboard
 	Route::any('dashboard', 'DashboardController@dashboard');

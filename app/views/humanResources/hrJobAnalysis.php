@@ -68,7 +68,13 @@
 	(function($){
 		standardAjaxSubmit({'action' : 'read', '_token' : "<?php echo $token; ?>"}, 'post', '/hr/cruds_job_analysis', responseCrudsJobAnalysisRead);
 	})(jQuery);
-		
+	
+	function cleanHash(hash)
+	{
+		var result = hash.replace(/[^\w\s]/gi, '');
+		return result;
+	}
+	
 	// Callbacks
 	function responseCrudsJobAnalysisRead(response)
 	{
@@ -97,7 +103,7 @@
 				"</div>");		
 			$.each(response, function(key, value)
 			{
-				$('table').append('<tr><td>'+value.ja_title+'</td><td>'+value.description+'</td><td>'+uCfirst(value.s_title)+'</td>'+
+				$('table').append('<tr><td class="title_'+cleanHash(value.hash)+'">'+value.ja_title+'</td><td  class="description_'+cleanHash(value.hash)+'">'+value.description+'</td><td  class="status_'+cleanHash(value.hash)+'">'+uCfirst(value.s_title)+'</td>'+
 				'<td>'+
 				'<div data-toggle="modal" data-target="#myModal" id="'+value.hash+'" class="ja-edit glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </div> &nbsp;'+
 				'<div class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </div>'+
@@ -135,14 +141,26 @@
 				case '5' : s_title = 'Job Advertistment';
 				break;
 			}
-			$('table').prepend('<tr><td>'+ja_title+'</td><td>'+description+'</td><td>'+s_title+'</td>'+
-			'<td>'+
-				'<span class="glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </span> &nbsp;'+
-				'<span class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
-				'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
-			'</td>'+
-			'</tr>');
-			$('form#createJobAnalysyForm')[0].reset();
+			
+			// Determine if update or add
+			// Add
+			if( $('#hash').val()=="" )
+			{
+				$('table').prepend('<tr><td>'+ja_title+'</td><td>'+description+'</td><td>'+s_title+'</td>'+
+				'<td>'+
+					'<span class="glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </span> &nbsp;'+
+					'<span class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
+					'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
+				'</td>'+
+				'</tr>');
+				$('form#createJobAnalysyForm')[0].reset();
+			} else { // Update
+				var hash = $('#hash').val();
+				$(".title_"+cleanHash(hash)).html(ja_title);
+				$(".description_"+cleanHash(hash)).html(description);
+				$(".status_"+cleanHash(hash)).html(s_title);		
+			}	
+			
 		} else {
 			$.each(response,function(key, val){
 				$('#'+key).css({'border-color' : 'red'});
@@ -169,7 +187,7 @@
 	}
 	
 	// Actions
-	// ADD
+	// ADD will serve as EDIT as well
 	$('form#createJobAnalysyForm').on('submit', function(e)
 	{
 		$('.error').html("");
@@ -184,6 +202,8 @@
 	$("div").on('click', '.ja-add', function()
 	{
 		$("#myModalLabel").html("Create New Job Analysis");
+		$('#hash').val(""); // reset hidden hash	
+		$('form#createJobAnalysyForm')[0].reset(); // reset the form
 	});
 	
 	// EDIT

@@ -10,6 +10,7 @@
 	<script src="/js/erps.js"></script>
 </head>
 <body>
+	<?php $token = csrf_token(); ?>
 	<nav class="navbar navbar-inverse" role="navigation">
 	  <div class="container">
 	    <div class="navbar-header">
@@ -43,7 +44,7 @@
 						<li><a href="#">Supplier</a></li>
 						<li><a href="#">Messenger</a></li>
 						<li><a href="#">Settings</a></li>
-						<li><a href="<?php echo URL::to('/logout'); ?>">Logout</a></li>
+						<li><a href="<?php echo URL::to('/logout?_token='.$token); ?>">Logout</a></li>
 					</ul>
 				</div>
 				<div class="col-3">
