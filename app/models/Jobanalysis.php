@@ -17,6 +17,21 @@
 						'title' 		=> (string) $post_data['title']
 					)
 				);
+			
+			// Get the inserted id			
+			$ja_id = DB::getPdo()->lastInsertId();	
+
+			if( $ja_id ) 
+			{
+				$hash = Security::encr( $ja_id );
+				DB::table( self::$table )
+					->where( 'id', '=', (int) $ja_id )
+					->update(
+						array(					
+							'hash'	=> (string) $hash
+						)
+				);
+			}
 		}
 		
 		// get all data
@@ -44,9 +59,9 @@
 				->where('hash', '=', $post_data['hash'])
 				->update(
 					array(
-						'title' 		=> $post_data['title'],
-						'description'	=> $post_data['description'],
-						'status'		=> $post_data['status']
+						'title' 		=> (string) $post_data['title'],
+						'description'	=> (string) $post_data['description'],
+						'status'		=> (string) $post_data['status']
 					)
 				);
 		}
