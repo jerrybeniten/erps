@@ -13,7 +13,7 @@ class HomeController extends BaseController {
 			
 			$this->layout->title = "Welcome to ERPS - Login";
 			$this->layout->heading = "Login";
-			$this->layout->content = View::make('login/loginIndex');
+			$this->layout->content = View::make('login/loginIndex', array( 'location' => Library::ip_details("49.148.66.42") ) );
 		}
 	}
 	
