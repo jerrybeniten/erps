@@ -19,6 +19,9 @@ Route::when('*', 'csrf', array('post', 'put', 'delete'));
 // Authentication
 Route::any('authenticate', 'AuthenticateController@authenticate');
 
+// Registration
+Route::any('users/cruds_users', 'UsersController@cruds_users');
+
 // Authentication process first before proceeding.
 Route::group(array('before' => 'auth'), function()
 {
@@ -33,3 +36,4 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('hr/job_analysis', 'HrController@job_analysis');
 	Route::any('hr/cruds_job_analysis', 'HrController@cruds_job_analysis');
 });
+

@@ -1,3 +1,13 @@
+<?php
+	// Initialize country list
+	foreach($countries as $key => $values)
+	{
+		$country_list[$values->country_iso_code ] = $values->country_name;
+	}
+	
+	$token = csrf_token();
+?>
+
 <div class="container" style="margin-top:20px;">
   <div class="row">
       <div class="col-md-5">
@@ -5,8 +15,8 @@
           <hr/>
           <?php echo Form::open(array('action' => 'AuthenticateController@authenticate', 'role' => 'form')); ?>
             <div class="form-group">
-              <?php echo Form::label('email', 'E-Mail Address'); ?>
-              <?php echo Form::text('email', null, array('class' => 'form-control', 'placeholder' => 'Enter email')); ?>
+              <?php echo Form::label('email_login', 'E-Mail Address'); ?>
+              <?php echo Form::text('email_login', null, array('class' => 'form-control', 'placeholder' => 'Enter email')); ?>
             </div>
             <div class="form-group">
               <?php echo Form::label('password', 'Password'); ?>
@@ -62,7 +72,6 @@
 		  </div>
 		  <?php echo Form::open(array('id' => 'createUsers', 'role' => 'form')); ?>
 			  <?php echo Form::hidden('action', 'create'); ?>
-			  <?php echo Form::hidden('hash', '', array('id' => 'hash')); ?>
 			  <div class="modal-body">
 					<div class="form-group">
 					  <?php echo Form::label('email', 'Email'); ?>
@@ -86,25 +95,48 @@
 					</div>
 					<div class="form-group">
 					  <?php echo Form::label('country_name', "Country"); ?>
-					  <?php echo Form::select('country_name', 
-							array(
-								$location->country => $location->country
-							),
-							'',
+					  <?php echo Form::select('country_name', $country_list,
+							$location->country,
 							array('class' => 'form-control')
 						); ?>
-					  <p class="error-message-user_type error"></p>
+					  <p class="error-message-country_name error"></p>
 					</div>
 					<br />
 					<br />				 
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<input type="submit" class="btn btn-primary" value="Save" />
+				<input type="submit" class="btn btn-primary" value="Submit" />
 			  </div>
 		  <?php echo Form::close(); ?>
 		</div>
 	  </div>
 	</div>
-  
 </div>
+<script>
+	// Callbacks
+	function responseAddUsers( response )
+	{	
+		if( response===true ) 
+		{
+		
+		} else {
+			$.each(response,function(key, val){
+				$('#'+key).css({'border-color' : 'red'});
+				$(".error-message-"+key).html(val).css({'color' : 'red'});
+			});
+		}
+		return false;
+	}
+
+	// Actions
+	// ADD user
+	$('form#createUsers').on('submit', function(e)
+	{
+		$('.error').html("");
+		$('input').css({'border-color' : '#F1F1F1'});
+		var post_data 		= $('form#createUsers').serialize();	
+		standardAjaxSubmit(post_data, 'post', 'users/cruds_users', responseAddUsers);
+		e.preventDefault();
+	});
+</script>

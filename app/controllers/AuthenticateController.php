@@ -11,7 +11,7 @@ class AuthenticateController extends BaseController {
 	
 	public function authenticate()
 	{
-		$email 	  = $this->input['email'];
+		$email 	  = $this->input['email_login'];
 		$password = $this->input['password'];
 		
 		if (Auth::attempt(array('email' => $email, 'password' => $password, 'is_active' => 1)))
