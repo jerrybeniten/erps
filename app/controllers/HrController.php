@@ -56,8 +56,8 @@ class HrController extends BaseController {
 			case 'create': 
 				if( $validatior->passes() && empty( $this->input['hash'] ) ) 
 				{
-					Jobanalysis::insert( $this->input );
-					return Response::json( true );
+					$hash = Jobanalysis::insert( $this->input );
+					return Response::json( 'create:'.$hash );
 					
 				} else if ( $validatior->passes() && !empty( $this->input['hash'] ) ) {
 				

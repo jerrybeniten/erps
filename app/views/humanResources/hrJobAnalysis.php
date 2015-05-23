@@ -20,7 +20,7 @@
 			<h4 class="modal-title" id="myModalLabel">Create New Job Analysis</h4>
 		  </div>
 		  <?php echo Form::open(array('id' => 'createJobAnalysyForm', 'role' => 'form')); ?>
-			  <?php echo Form::hidden('action', 'create'); ?>
+			  <?php echo Form::hidden('action', 'create', array('id' => 'action')); ?>
 			  <?php echo Form::hidden('hash', '', array('id' => 'hash')); ?>
 			  <div class="modal-body">
 					<div class="form-group">
@@ -94,7 +94,7 @@
 							"<th class='col-sm-1'>Title</th>"+
 							"<th class='col-sm-1'>Description</th>"+
 							"<th class='col-sm-1'>Status</th>"+						
-							"<th class='col-sm-1'>Action</th>"+	
+							"<th class='col-sm-1'>Actions</th>"+	
 						  "</tr>"+
 						"</thead>"+
 						"<tbody>"+
@@ -115,14 +115,9 @@
 	
 	function responseCrudsJobAnalysis(response) 
 	{	
-		// insert response
-		if( response===true ) 
-		{
-			$('#myModal').modal('hide');
-		    
-			var ja_title 	= $('#title').val();
-			var description = $('#description').val();
-			var s_title  	= $('#status').val();
+		var ja_title 	= $('#title').val();
+		var description = $('#description').val();
+		var s_title  	= $('#status').val();
 			
 			switch(s_title) 
 			{
@@ -141,31 +136,42 @@
 				case '5' : s_title = 'Job Advertistment';
 				break;
 			}
-			
-			// Determine if update or add
-			// Add
-			if( $('#hash').val()=="" )
-			{
-				$('table').prepend('<tr><td>'+ja_title+'</td><td>'+description+'</td><td>'+s_title+'</td>'+
-				'<td>'+
-					'<span class="glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </span> &nbsp;'+
-					'<span class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
-					'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
-				'</td>'+
-				'</tr>');
-				$('form#createJobAnalysyForm')[0].reset();
-			} else { // Update
-				var hash = $('#hash').val();
-				$(".title_"+cleanHash(hash)).html(ja_title);
-				$(".description_"+cleanHash(hash)).html(description);
-				$(".status_"+cleanHash(hash)).html(s_title);		
-			}	
+		
+		if( response===true ) 
+		{
+			$('#myModal').modal('hide');
+		    
+			// Update
+			var hash = $('#hash').val();
+				
+			$(".title_"+cleanHash(hash)).html(ja_title);
+			$(".description_"+cleanHash(hash)).html(description);
+			$(".status_"+cleanHash(hash)).html(s_title);
 			
 		} else {
-			$.each(response,function(key, val){
-				$('#'+key).css({'border-color' : 'red'});
-				$(".error-message-"+key).html(val).css({'color' : 'red'});
-			});
+
+			var final_response = response.split(':');
+			if (final_response[0]==="create"){
+				
+				$('#myModal').modal('hide');
+				$('#hash').val(final_response[1]);
+				$('#action').val('create');
+				
+				$('table').prepend('<tr><td class="title_'+cleanHash(final_response[1])+'">'+ja_title+'</td><td class="description_'+cleanHash(final_response[1])+'">'+description+'</td><td class="status_'+cleanHash(final_response[1])+'">'+s_title+'</td>'+
+					'<td>'+
+						'<span  id="'+final_response[1]+'" class="glyphicon glyphicon-edit ja-edit" style="color:green;cursor:pointer" data-target="#myModal" data-toggle="modal" title="Edit"> </span> &nbsp;'+
+						'<span  class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
+						'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
+					'</td>'+
+					'</tr>');
+				$('form#createJobAnalysyForm')[0].reset();
+				
+			} else {
+				$.each(response,function(key, val){
+					$('#'+key).css({'border-color' : 'red'});
+					$(".error-message-"+key).html(val).css({'color' : 'red'});
+				});
+			}
 		}
 		
 		return false;

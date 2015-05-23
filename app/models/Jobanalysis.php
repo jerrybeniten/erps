@@ -32,6 +32,8 @@
 						)
 				);
 			}
+			
+			return $hash;
 		}
 		
 		// get all data
