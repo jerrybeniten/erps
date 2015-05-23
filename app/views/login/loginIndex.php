@@ -106,7 +106,7 @@
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<input type="submit" class="btn btn-primary" value="Submit" />
+				<input type="submit" class="btn btn-primary modal-submit-button" value="Submit" />
 			  </div>
 		  <?php echo Form::close(); ?>
 		</div>
@@ -118,8 +118,8 @@
 	function responseAddUsers( response )
 	{	
 		if( response===true ) 
-		{
-		
+		{	$('.modal-submit-button').hide();
+			$('.modal-body').html('Thank you for subscribing! We are currently building your ERPS modules please keep in touch until we announce our first release.');
 		} else {
 			$.each(response,function(key, val){
 				$('#'+key).css({'border-color' : 'red'});

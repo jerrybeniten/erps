@@ -28,7 +28,20 @@ class UsersController extends BaseController {
 			case 'create': 
 				if( $validatior->passes() ) 
 				{
-					Users::insert( $this->input );
+					User::insert( $this->input );
+											
+					$datax = array('email' => array( 
+						1 => $this->input['email']
+					));
+					
+					Mail::send('emails.register', $datax, function($message) Use ($datax)
+					{
+					  
+						$message->to($datax['email'][1], 'ERPS')
+					  		  ->subject('ERPS Subscription');
+					  
+					});
+					
 					return Response::json( true );
 				} else {
 					return Response::json( $validatior->messages() );

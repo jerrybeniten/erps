@@ -79,5 +79,18 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		return $this->email;
 	}
-
+	
+	Public static function insert( $post_data )
+	{
+		DB::table('users')
+			->insert(
+				array(
+					'email' 	   => $post_data['email'],
+					'user_type'    => $post_data['user_type'],
+					'country_name' => $post_data['country_name'],
+					'is_active'	   => 0, 
+					'created_at'   => date('Y-m-d H:i:s')
+				)
+			);
+	}
 }
