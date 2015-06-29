@@ -35,12 +35,13 @@
 				<div class="col-md-2">
 					<ul class="nav nav-pills nav-stacked">
 						<li class="<?php echo ( Request::segment(1) === 'dashboard' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/'); ?>">Dashboard</a></li>
+						<li class="<?php echo ( Request::segment(1) === 'clients' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/clients'); ?>">Clients</a></li>
 						<li class="<?php echo ( Request::segment(1) === 'hr' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/hr'); ?>">Human Resources</a></li>
 						<li><a href="#">Production</a></li>
 						<li><a href="#">Marketing and Sales</a></li>
 						<li><a href="#">IT</a></li>					
 						<li><a href="#">Payroll</a></li>					
-						<li><a href="#">Companies</a></li>
+						
 						<li><a href="#">Supplier</a></li>
 						<li><a href="#">Messenger</a></li>
 						<li><a href="#">Settings</a></li>
