@@ -40,6 +40,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('clients', 'ClientsController@clients');
 	Route::any('clients/clients_list', 'ClientsController@clients_list');
 	Route::any('clients/company_list', 'ClientsController@company_list');
+	Route::any('clients/cruds_companies', 'ClientsController@cruds_companies');
 });
 
 

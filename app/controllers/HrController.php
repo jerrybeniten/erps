@@ -50,7 +50,7 @@ class HrController extends BaseController {
 		
 		$validatior = Validator::make($this->input, $rules);
 		
-		switch($this->input['action'])
+		switch( $this->input['action'] )
 		{
 			// Create this includes update
 			case 'create': 

@@ -55,6 +55,22 @@ class ClientsController extends BaseController {
 		);
 	}
 	
+	public function cruds_companies()
+	{
+		switch($this->input['action']) 
+		{
+			case 'create': 
+				return Companies::insert( $this->input );
+			break;
+			
+			case 'read' : 
+				return Response::json(Companies::read());
+			break;
+		}
+		
+		die();
+	}
+	
 	// View Generator
 	public function createView( $post_data ) 
 	{

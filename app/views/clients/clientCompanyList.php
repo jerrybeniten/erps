@@ -18,17 +18,16 @@
 	?>
 	
 	<!-- Modal Trigger : Create New Company -->
-	<div class="container" style='width:70%'>
-		<div class="modal-zero">
-			<a href="#" data-toggle="modal" data-target="#myModal"><span class="label label-default">
-				No Companies Yet! Click this message to create one!</span></a>
+	<div class="modal-zero">
+		<div class="container" style="width:70%">
+		<a href="#" data-toggle="modal" data-target="#myModal"><span class="label label-default">
+			No Companies Yet! Click this message to create one!</span></a>
 		</div>
 	</div>
-	
+		
 	<!--Company Table -->
-	<div class="co-table">
-	</div>
-	
+	<div class="co-table"></div>
+		
 	<!-- Modal: Create New Company -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
@@ -114,6 +113,57 @@
 </div>
 
 <script>
+	
+	// read and detect if company records exist
+	(function($){
+		standardAjaxSubmit({'action' : 'read', '_token' : "<?php echo $token; ?>"}, 'post', '/clients/cruds_companies', responseCrudsCompaniesRead);
+	})(jQuery);
+	
+	function cleanHash(hash)
+	{
+		var result = hash.replace(/[^\w\s]/gi, '');
+		return result;
+	}
+	
+	// Callbacks
+	function responseCrudsCompaniesRead(response)
+	{
+		// check the array length if greater 0
+		var arr_length = response.length;	
+		
+		if( arr_length > 0 ) 
+		{	
+			// reset html element
+			$('.modal-zero').hide();
+			$('.co-table').html('test');
+			
+			$('.co-table').html(""+
+				"<div class='container' style='width:70%'>"+
+				"<div style='cursor:pointer' data-toggle='modal' data-target='#myModal' class='ja-add'><span><i class='glyphicon glyphicon-plus' style='color:green'></i></span><span> Add Company</span></div><br/>"+
+					"<table class='table table-bordered table-striped'>"+
+						"<thead>"+
+						  "<tr>"+
+							"<th class='col-sm-1'>Company</th>"+
+							"<th class='col-sm-1'>Address</th>"+
+							"<th class='col-sm-1'>Contacs</th>"+						
+							"<th class='col-sm-1'>Actions</th>"+	
+						  "</tr>"+
+						"</thead>"+
+						"<tbody>"+
+						"</tbody>"+
+					"</table>"+
+				"</div>");		
+			$.each(response, function(key, value)
+			{
+				$('table').append('<tr><td class="title_'+cleanHash(value.hash)+'">'+value.company_name+'</td><td  class="address_'+cleanHash(value.hash)+'">'+value.street_number+' '+value.street+' '+value.city+' '+value.state_code+'</td><td  class="contacts_'+cleanHash(value.hash)+'">'+value.phone+'/'+value.mobile+'</td>'+
+				'<td>'+
+				'<div data-toggle="modal" data-target="#myModal" id="'+value.hash+'" class="co-edit glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </div> &nbsp;'+
+				'<div class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </div>'+
+				'</td>'+
+				'</tr>');
+			});
+		}
+	}
 	
 	function responseCrudsCompanies(response)
 	{

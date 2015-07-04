@@ -32,3 +32,6 @@ INSERT INTO `erps`.`states` (`state_name`, `state_code`) VALUES ('Western Austra
 
 ALTER TABLE `erps`.`companies` 
 DROP COLUMN `company_status_id`;
+
+ALTER TABLE `erps`.`companies` 
+ADD COLUMN `hash` VARCHAR(255) NOT NULL AFTER `updated_at`;

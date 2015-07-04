@@ -57,9 +57,9 @@
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<input type="submit" class="btn btn-primary" value="Save" />
 			  </div>
-		  <?php echo Form::close(); ?>
+				<?php echo Form::close(); ?>
+			</div>
 		</div>
-	  </div>
 	</div>
 </div>
 
