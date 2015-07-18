@@ -6,6 +6,15 @@
 		private static $has_many_status 	= 'status';
 		private static $has_many_companies 	= 'companies';
 		
+		public static function getCount()
+		{
+			$result = DB::table( self::$table )
+				->select(DB::raw('count(1) as counter'))
+				->get();
+			
+			return $result;
+		}
+		
 		// insert a row of data
 		public static function insert( $post_data )
 		{		

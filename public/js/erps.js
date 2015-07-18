@@ -29,3 +29,19 @@ function uCfirst(str)
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
+// no stop
+function standardAjaxSubmit_2(post_data, method, url, callback_name) 
+{
+    $.ajax(
+	{
+		type    : method,
+		url     : url,
+		data    : post_data,
+		cache   : false,
+		success : function (data) 
+		{
+			callback_name(data);
+		}
+	}); 
+}
+

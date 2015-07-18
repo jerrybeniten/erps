@@ -92,6 +92,15 @@ class HrController extends BaseController {
 		die();
 	}
 	
+	public function counter()
+	{
+		switch( $this->input['action'] )
+		{
+			case 'read' : return Response::json( Jobanalysis::getCount() );
+		}
+		die();
+	}	
+	
 	// View Generator
 	public function createView( $post_data ) 
 	{

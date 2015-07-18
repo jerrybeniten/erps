@@ -35,6 +35,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('hr', 'HrController@hr');
 	Route::any('hr/job_analysis', 'HrController@job_analysis');
 	Route::any('hr/cruds_job_analysis', 'HrController@cruds_job_analysis');
+	Route::any('hr/counter', 'HrController@counter');
 	
 	// Clieints 
 	Route::any('clients', 'ClientsController@clients');

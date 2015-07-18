@@ -2,7 +2,6 @@
 
 	<?php $token = csrf_token(); ?>
 	
-	
 	<?php 
 		// Generate List
 		$company_list[''] = '-- Select Company --';
@@ -87,6 +86,18 @@
 		standardAjaxSubmit({'action' : 'read', '_token' : "<?php echo $token; ?>"}, 'post', '/hr/cruds_job_analysis', responseCrudsJobAnalysisRead);
 	})(jQuery);
 	
+	function responseCounterRead( response )
+	{
+		$.each(response, function(key, value)
+		{
+			$('.ja-count').text( value.counter );
+		});
+		return false;
+	}
+	
+	// Counter
+	standardAjaxSubmit_2({'action' : 'read', '_token' : "<?php echo $token; ?>"}, 'post', '/hr/counter', responseCounterRead);
+	
 	function cleanHash(hash)
 	{
 		var result = hash.replace(/[^\w\s]/gi, '');
@@ -134,7 +145,7 @@
 				'</td>'+
 				'</tr>');
 			});
-		}
+		}	
 	}
 	
 	function responseCrudsJobAnalysis(response) 
@@ -204,7 +215,7 @@
 				});
 			}
 		}
-		
+		standardAjaxSubmit_2({'action' : 'read', '_token' : "<?php echo $token; ?>"}, 'post', '/hr/counter', responseCounterRead);
 		return false;
 	}
 	
