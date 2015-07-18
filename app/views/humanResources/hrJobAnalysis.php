@@ -2,6 +2,15 @@
 
 	<?php $token = csrf_token(); ?>
 	
+	
+	<?php 
+		// Generate List
+		$company_list[''] = '-- Select Company --';
+		foreach( $companies as $value )
+		{
+			$company_list[$value->hash] = $value->company_name;
+		}
+	?>
 	<!-- Modal Trigger : Create New Job Analysis-->
 	<div class="modal-zero">
 		<a href="#" data-toggle="modal" data-target="#myModal"><span class="label label-default">No Job Analysis Yet! Click this message to create one!</span></a>
@@ -43,6 +52,15 @@
 								'4' => 'Person Specification',
 								'5' => 'Job Advertisement'
 							),
+							'',
+							array('class' => 'form-control', 'placeholder' => 'Description')
+						); ?>
+					  <p class="error-message-status error"></p>
+					</div>
+					<div class="form-group">
+					  <?php echo Form::label('company_id', 'Company'); ?>
+					  <?php echo Form::select('company_id', 
+							$company_list,
 							'',
 							array('class' => 'form-control', 'placeholder' => 'Description')
 						); ?>
@@ -91,6 +109,7 @@
 					"<table class='table table-bordered table-striped'>"+
 						"<thead>"+
 						  "<tr>"+
+							"<th class='col-sm-1'>Company</th>"+
 							"<th class='col-sm-1'>Title</th>"+
 							"<th class='col-sm-1'>Description</th>"+
 							"<th class='col-sm-1'>Status</th>"+						
@@ -103,7 +122,12 @@
 				"</div>");		
 			$.each(response, function(key, value)
 			{
-				$('table').append('<tr><td class="title_'+cleanHash(value.hash)+'">'+value.ja_title+'</td><td  class="description_'+cleanHash(value.hash)+'">'+value.description+'</td><td  class="status_'+cleanHash(value.hash)+'">'+uCfirst(value.s_title)+'</td>'+
+				$('table').append(''+
+				'<tr>'+
+					'<td class="company_'+cleanHash(value.hash)+'">'+value.c_company_name+'</td>'+
+					'<td class="title_'+cleanHash(value.hash)+'">'+value.ja_title+'</td>'+
+					'<td class="description_'+cleanHash(value.hash)+'">'+value.description+'</td>'+
+					'<td class="status_'+cleanHash(value.hash)+'">'+uCfirst(value.s_title)+'</td>'+
 				'<td>'+
 				'<div data-toggle="modal" data-target="#myModal" id="'+value.hash+'" class="ja-edit glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </div> &nbsp;'+
 				'<div class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </div>'+
@@ -115,9 +139,10 @@
 	
 	function responseCrudsJobAnalysis(response) 
 	{	
-		var ja_title 	= $('#title').val();
-		var description = $('#description').val();
-		var s_title  	= $('#status').val();
+		var ja_title 		= $('#title').val();
+		var description 	= $('#description').val();
+		var s_title  		= $('#status').val();
+		var c_company_name 	= $('#company_id').find(":selected").text();
 			
 			switch(s_title) 
 			{
@@ -147,6 +172,7 @@
 			$(".title_"+cleanHash(hash)).html(ja_title);
 			$(".description_"+cleanHash(hash)).html(description);
 			$(".status_"+cleanHash(hash)).html(s_title);
+			$(".company_"+cleanHash(hash)).html(c_company_name);
 			
 		} else {
 
@@ -157,12 +183,17 @@
 				$('#hash').val(final_response[1]);
 				$('#action').val('create');
 				
-				$('table').prepend('<tr><td class="title_'+cleanHash(final_response[1])+'">'+ja_title+'</td><td class="description_'+cleanHash(final_response[1])+'">'+description+'</td><td class="status_'+cleanHash(final_response[1])+'">'+s_title+'</td>'+
-					'<td>'+
-						'<span  id="'+final_response[1]+'" class="glyphicon glyphicon-edit ja-edit" style="color:green;cursor:pointer" data-target="#myModal" data-toggle="modal" title="Edit"> </span> &nbsp;'+
-						'<span  class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
-						'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
-					'</td>'+
+				$('table').prepend(''+
+					'<tr>'+
+						'<td class="company_'+cleanHash(final_response[1])+'">'+c_company_name+'</td>'+
+						'<td class="title_'+cleanHash(final_response[1])+'">'+ja_title+'</td>'+
+						'<td class="description_'+cleanHash(final_response[1])+'">'+description+'</td>'+
+						'<td class="status_'+cleanHash(final_response[1])+'">'+s_title+'</td>'+
+						'<td>'+
+							'<span  id="'+final_response[1]+'" class="glyphicon glyphicon-edit ja-edit" style="color:green;cursor:pointer" data-target="#myModal" data-toggle="modal" title="Edit"> </span> &nbsp;'+
+							'<span  class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </span>'+
+							'<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>'+	
+						'</td>'+
 					'</tr>');
 				$('form#createJobAnalysyForm')[0].reset();
 				
@@ -183,11 +214,13 @@
 		var description = response[0].description;
 		var status 		= response[0].status;
 		var hash 		= response[0].hash;
+		var company_id 	= response.company_id;
 		
 		$('#title').val(title);
 		$('#description').val(description);
 		$('#status').val(status);
 		$('#hash').val(hash);
+		$('#company_id').val(company_id);
 
 		return false;
 	}

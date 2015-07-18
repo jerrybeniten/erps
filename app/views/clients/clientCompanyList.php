@@ -155,7 +155,7 @@
 				"</div>");		
 			$.each(response, function(key, value)
 			{
-				$('table').append('<tr><td class="title_'+cleanHash(value.hash)+'">'+value.company_name+'</td><td  class="address_'+cleanHash(value.hash)+'">'+value.street_number+' '+value.street+' '+value.city+' '+value.state_code+'</td><td  class="contacts_'+cleanHash(value.hash)+'">'+value.phone+'/'+value.mobile+'</td>'+
+				$('table').append('<tr><td class="company_'+cleanHash(value.hash)+'">'+value.company_name+'</td><td  class="address_'+cleanHash(value.hash)+'">'+value.street_number+' '+value.street+' '+value.city+' '+value.state_code+'</td><td  class="contacts_'+cleanHash(value.hash)+'">'+value.phone+'/'+value.mobile+'</td>'+
 				'<td>'+
 				'<div data-toggle="modal" data-target="#myModal" id="'+value.hash+'" class="co-edit glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </div> &nbsp;'+
 				'<div class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </div>'+
@@ -167,6 +167,48 @@
 	
 	function responseCrudsCompanies(response)
 	{
+		var company_name 	= $('#company_name').val();	
+		var street_number  	= $('#street_number').val();
+		var street  		= $('#street').val();
+		var city  			= $('#city').val();
+			
+		if( response===true ) 
+		{
+			$('#myModal').modal('hide');
+		    
+			// Update
+			var hash = $('#hash').val();
+				
+			$(".title_"+cleanHash(hash)).html(ja_title);
+			$(".description_"+cleanHash(hash)).html(description);
+			$(".status_"+cleanHash(hash)).html(s_title);
+			
+		} else {
+			
+			var final_response = response.split(':');
+			if (final_response[0]==="create"){
+				
+				$('#myModal').modal('hide');
+				$('#hash').val(final_response[1]);
+				$('#action').val('create');
+				
+				$('table').prepend('<tr><td class="company_'+cleanHash(final_response[1])+'">'+company_name+'</td><td  class="address_'+cleanHash(final_response[1])+'">'+street_number+' '+street+' '+city+'</td><td  class="contacts_'+cleanHash(final_response[1])+'">'+company_name+'/'+company_name+'</td>'+
+				'<td>'+
+				'<div data-toggle="modal" data-target="#myModal" id="'+cleanHash(final_response[1])+'" class="co-edit glyphicon glyphicon-edit" style="color:green;cursor:pointer" title="Edit"> </div> &nbsp;'+
+				'<div class="glyphicon glyphicon-trash" style="color:red;cursor:pointer"  title="Delete"> </div>'+
+				'</td>'+
+				'</tr>');
+				
+				$('form#createNewCompanyForm')[0].reset();
+				
+			} else {
+				$.each(response,function(key, val){
+					$('#'+key).css({'border-color' : 'red'});
+					$(".error-message-"+key).html(val).css({'color' : 'red'});
+				});
+			}
+		}
+		
 		return false;
 	}
 

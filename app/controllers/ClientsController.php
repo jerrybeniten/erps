@@ -60,7 +60,8 @@ class ClientsController extends BaseController {
 		switch($this->input['action']) 
 		{
 			case 'create': 
-				return Companies::insert( $this->input );
+				$hash = Companies::insert( $this->input );
+				return Response::json( 'create:'.$hash );
 			break;
 			
 			case 'read' : 

@@ -29,12 +29,15 @@ class HrController extends BaseController {
 	// Sub-module 
 	public function job_analysis() 
 	{
+		
+		$data['companies'] = Companies::read();
+	
 		$this->createView(
 			array(
 				'ERPS - Human Resources - Job Analysis',
 				'Human Resources - Job Analysis',
 				'humanResources/hrJobAnalysis',
-				'',
+				 $data,
 				'humanResources/hrMenuPartial'
 			)
 		);

@@ -8,8 +8,12 @@
 	<script src="/js/bootstrap.min.js"></script>
 	<script src="/js/bootstrap-datepicker.js"></script>
 	<script src="/js/erps.js"></script>
+	
 </head>
 <body>
+<style>
+		
+	</style>
 	<?php $token = csrf_token(); ?>
 	<nav class="navbar navbar-inverse" role="navigation">
 	  <div class="container">
@@ -37,11 +41,10 @@
 						<li class="<?php echo ( Request::segment(1) === 'dashboard' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/'); ?>">Dashboard</a></li>
 						<li class="<?php echo ( Request::segment(1) === 'clients' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/clients'); ?>">Clients</a></li>
 						<li class="<?php echo ( Request::segment(1) === 'hr' ) ? 'active' : ''; ?>"><a href="<?php echo URL::to('/hr'); ?>">Human Resources</a></li>
+						<li><a href="#">Payroll</a></li>	
 						<li><a href="#">Production</a></li>
 						<li><a href="#">Marketing and Sales</a></li>
-						<li><a href="#">IT</a></li>					
-						<li><a href="#">Payroll</a></li>					
-						
+						<li><a href="#">IT</a></li>												
 						<li><a href="#">Supplier</a></li>
 						<li><a href="#">Messenger</a></li>
 						<li><a href="#">Settings</a></li>
@@ -50,11 +53,11 @@
 				</div>
 				<div class="col-3">
 					<?php echo isset($partial) ? $partial."<br /><br />" : '' ; ?>
-					<?php echo isset($content) ? $content."<br /><br />" : '' ; ?>
+					<?php echo isset($content) ? $content."<br />" : '' ; ?>
 				</div>
 			</div>
 			<?php } else { ?>
-				<?php echo isset($content) ? $content."<br /><br />" : '' ; ?>
+				<?php echo isset($content) ? $content."<br />" : '' ; ?>
 			<?php } ?>
 			<div id="footer" class="well">
 				<div>ERPs - Enterprise Resources Planning System | ERPS Copyright <?php echo date('Y'); ?></div>

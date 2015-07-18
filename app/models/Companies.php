@@ -38,7 +38,7 @@
 						)
 					);
 			}
-			
+				
 			return $hash;
 		}
 		
@@ -56,6 +56,7 @@
 					'c.mobile',
 					's.state_code'
 				)
+				->orderBy('c.id', 'DESC')
 				->get();
 			return $result;
 		}
